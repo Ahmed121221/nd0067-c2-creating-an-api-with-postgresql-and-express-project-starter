@@ -1,52 +1,61 @@
 import { Request, Response, Application } from "express";
-
+import validitors from "../middlewares/Productvalidators";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import ProdactStore, { Product } from "../models/product";
+import ProdactsStore, { Product } from "../models/product";
+import ProductCategory from "../models/productCategory";
 
 async function index(req: Request, res: Response): Promise<void> {
 	try {
-		const products = await new ProdactStore().index();
+		const products = await new ProdactsStore().index();
 		res.status(200).json(products);
 	} catch (err) {
-		res.status(500).json({ error: err });
+		console.log("Handler : product.index() => ", err);
+		res.status(500).json({ error: "coulde't fetch Products." });
 	}
 }
 
 async function show(req: Request, res: Response): Promise<void> {
-	console.log("show route ", req.params.id);
 	try {
-		// todo check if id is a number firest.
 		const id = Number(req.params.id);
-		if (!id) {
-			throw new URIError("Id must be a number.");
-		}
-		const products = await new ProdactStore().show(id);
+		const products = await new ProdactsStore().show(id);
 		res.status(200).json(products?.pop());
 	} catch (err) {
-		res.json({ error: err });
+		console.log("Handler : product.show() => ", typeof err);
+		res
+			.status(500)
+			.json(err instanceof Error ? err.message : "somthing wrong Happend, please try again later.");
 	}
 }
 
 async function create(req: Request, res: Response): Promise<void> {
+	console.log("create quiry : ", req.query);
 	try {
-		const { name, price, c_id } = req.query;
-		const product: Product = {
-			name: String(name),
-			price: Number(price),
-			category: {
-				id: Number(c_id),
-			},
-		};
-		const createdProduct: Product[] | null = await new ProdactStore().create(product);
+		const { name, price, category_id } = req.query;
+		const productStore = new ProdactsStore();
+
+		const pc: ProductCategory = new ProductCategory(
+			String(name),
+			Number(price),
+			Number(category_id)
+		);
+
+		if (!(await pc.category.checId()))
+			throw new Error(`category with id = ${pc.category.id} dose not exist.`);
+
+		const createdProduct: Product[] = await productStore.create(pc.toProduct());
+
 		res.status(200).json(createdProduct);
 	} catch (err) {
-		res.json({ error: err });
+		console.log(err);
+		res
+			.status(404)
+			.json(err instanceof Error ? err.message : "somthing wrong Happend, please try again later.");
 	}
 }
 const products_routes = (app: Application): void => {
 	app.get("/products/:id", show);
 	app.get("/products", index);
-	app.post("/products", create);
+	app.post("/products", validitors, create);
 };
 
 export default products_routes;

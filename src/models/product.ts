@@ -41,6 +41,7 @@ class ProdactStore {
 					join categories c
 					on p.category_id = c.id;`;
 		const query: Quiry = { q, errMsg: `couldn't fetch Product with id = ${id}` };
+
 		const products = await Connection.excute<IProductCategory>(query);
 
 		if (products == null) throw new Error(`Product with ${id} dose not exist.`);

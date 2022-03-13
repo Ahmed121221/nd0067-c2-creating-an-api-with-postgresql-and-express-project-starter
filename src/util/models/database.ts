@@ -15,7 +15,7 @@ export class Connection {
 			conn.release();
 			return result.rows.length ? result.rows : null;
 		} catch (err) {
-			console.log("in ------- ", err);
+			console.log("------- Connection ------- ", err);
 			throw new Error(`${quiry.errMsg}, ${err}`);
 		}
 	}

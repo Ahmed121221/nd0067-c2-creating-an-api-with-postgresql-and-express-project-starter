@@ -23,7 +23,7 @@ class ProdactStore {
 				   join categories c
 				   on p.category_id = c.id;`;
 
-		const query: Quiry = { q, errMsg: `couldn't fetch Products` };
+		const query: Quiry = { q };
 		const result = await Connection.excute<IProductCategory>(query);
 
 		return result ? ProductCategory.toProducts(result) : null;
@@ -40,7 +40,7 @@ class ProdactStore {
 					  where id=${id} )  p
 					join categories c
 					on p.category_id = c.id;`;
-		const query: Quiry = { q, errMsg: `couldn't fetch Product with id = ${id}` };
+		const query: Quiry = { q };
 
 		const products = await Connection.excute<IProductCategory>(query);
 

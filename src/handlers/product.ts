@@ -1,8 +1,9 @@
 import { Request, Response, Application } from "express";
-import validitors from "../middlewares/Productvalidators";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 import ProdactsStore, { Product } from "../models/product";
+import validitors from "../middlewares/productvalidators";
 import ProductCategory from "../models/productCategory";
+import auth from "../middlewares/authentication";
 
 async function index(req: Request, res: Response): Promise<void> {
 	try {
@@ -52,10 +53,11 @@ async function create(req: Request, res: Response): Promise<void> {
 			.json(err instanceof Error ? err.message : "somthing wrong Happend, please try again later.");
 	}
 }
+
 const products_routes = (app: Application): void => {
 	app.get("/products/:id", show);
 	app.get("/products", index);
-	app.post("/products", validitors, create);
+	app.post("/products", auth, validitors, create);
 };
 
 export default products_routes;

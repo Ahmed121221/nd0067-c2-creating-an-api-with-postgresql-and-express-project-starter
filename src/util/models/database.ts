@@ -2,7 +2,6 @@ import Clint from "../../database";
 
 export type Quiry = {
 	q: string;
-	errMsg?: string;
 	params?: unknown[];
 };
 
@@ -15,8 +14,8 @@ export class Connection {
 			conn.release();
 			return result.rows.length ? result.rows : null;
 		} catch (err) {
-			console.log("------- Connection ------- ", err);
-			throw new Error(`${quiry.errMsg}, ${err}`);
+			console.log("------- Connection Error ------- \n", err);
+			throw new Error(`Something Wrong Happend When The Systen Tried To Fetch/retrive Tha Data.`);
 		}
 	}
 }

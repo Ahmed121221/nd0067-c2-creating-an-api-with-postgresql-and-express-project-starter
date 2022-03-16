@@ -15,8 +15,33 @@ products_routes(app);
 user_routes(app);
 orders_routes(app);
 
+const userApi = [
+	"post: /user/login? : (email, password)=> getToken",
+	"post: /user? : (email, password, firstName, lastName) => getToken",
+	"get: /users : => []users",
+	"get: /users/:email => user",
+];
+
+const productApi = [
+	"post: /products? : (name, price, category_id ) => []product",
+	"get: /products : => []product",
+	"get: /products/:id => product",
+];
+
+const orderApi = [
+	"post: /orders? : (user_id,product_id,quantity) => product",
+	"post: /orders/add? : (order_id,product_id,quantity) => order_id ",
+	"get: /orders/:user_id/:status :  => []order",
+];
+
 app.get("/", function (req: Request, res: Response) {
-	res.send("Hello World!");
+	res.json({
+		endPoints: {
+			users: userApi,
+			products: productApi,
+			orders: orderApi,
+		},
+	});
 });
 
 app.listen(3000, function () {

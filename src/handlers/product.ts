@@ -1,7 +1,7 @@
 import { Request, Response, Application } from "express";
 
 import ProdactsStore, { Product } from "../models/product";
-import validitors from "../middlewares/productvalidators";
+import validitors from "../middlewares/validatores/product";
 import ProductCategory from "../models/productCategory";
 import auth from "../middlewares/authentication";
 
@@ -29,7 +29,6 @@ async function show(req: Request, res: Response): Promise<void> {
 }
 
 async function create(req: Request, res: Response): Promise<void> {
-	console.log("create quiry : ", req.query);
 	try {
 		const { name, price, category_id } = req.query;
 		const productStore = new ProdactsStore();

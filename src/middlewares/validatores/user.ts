@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import ProductCategory from "../models/productCategory";
+import ProductCategory from "../../models/productCategory";
 
-export function postProduct(req: Request, res: Response, next: NextFunction) {
+export function creat(req: Request, res: Response, next: NextFunction) {
 	const query = req.query;
 
 	for (const attr of ProductCategory.mustAttributes) {
@@ -25,4 +25,4 @@ export function postProduct(req: Request, res: Response, next: NextFunction) {
 	next();
 }
 
-export default [postProduct];
+export default [creat];

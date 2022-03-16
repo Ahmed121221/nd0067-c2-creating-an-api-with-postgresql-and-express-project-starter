@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import ProductCategory from "../models/productCategory";
+import ProductCategory from "../../models/productCategory";
 
-export function creat(req: Request, res: Response, next: NextFunction) {
+export function postProduct(req: Request, res: Response, next: NextFunction) {
 	const query = req.query;
 
 	for (const attr of ProductCategory.mustAttributes) {
@@ -21,8 +21,17 @@ export function creat(req: Request, res: Response, next: NextFunction) {
 			return;
 		}
 	}
-
 	next();
 }
 
-export default [creat];
+export function showProduct(req: Request, res: Response, next: NextFunction) {
+	const id = Number(req.params.id);
+	if (isNaN(id)) {
+		res.status(404);
+		res.json("Id Must Be Include As A Numbe");
+		return;
+	}
+	next();
+}
+
+export default [postProduct];

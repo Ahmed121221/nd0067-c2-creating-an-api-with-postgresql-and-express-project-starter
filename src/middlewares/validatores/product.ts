@@ -2,23 +2,25 @@ import { Request, Response, NextFunction } from "express";
 import ProductCategory from "../../models/productCategory";
 
 export function postProduct(req: Request, res: Response, next: NextFunction) {
-	const query = req.query;
+	const query = req.body;
 
 	for (const attr of ProductCategory.mustAttributes) {
-		if (query[attr] == undefined) {
+		const value = query[attr];
+		if (value == undefined) {
 			res.status(400).json(`${attr} Must Be Exists.`);
 			return;
 		}
 
-		if (attr == "name" && typeof query[attr] !== "string") {
+		if (value == "name" && typeof value !== "string") {
 			res.status(400).json(`${attr} Must Be A string.`);
 			return;
 		}
 
 		if (attr == "price" || attr == "category_id") {
-			if (!Number(query[attr])) throw new Error(`${attr} Must Be A Number.`);
-			res.status(400).json(`${attr} Must Be A Number.`);
-			return;
+			if (isNaN(Number(value))) {
+				res.status(400).json(`${attr} Must Be A Number.`);
+				return;
+			}
 		}
 	}
 	next();
@@ -34,4 +36,4 @@ export function showProduct(req: Request, res: Response, next: NextFunction) {
 	next();
 }
 
-export default [postProduct];
+export default postProduct;

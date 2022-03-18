@@ -23,7 +23,7 @@ export class Category {
 	}
 
 	async checId(): Promise<boolean> {
-		// check if id in data base and assign it's name.
+		// check if id in database and assign this.name
 		const q = `select name from categories where id =${this._id};`;
 		const query: Quiry = { q };
 		const result = await Connection.excute<ICategory>(query);
@@ -32,5 +32,20 @@ export class Category {
 
 		this._name = String(result[0].name) ?? "";
 		return true;
+	}
+
+	async create(): Promise<ICategory> {
+		const q = `INSERT INTO categories
+                     (id, name)
+                   VALUES ($1, $2) 
+                   returning id, name;`;
+		const categoris = await Connection.excute<ICategory>({
+			q,
+			params: [this._id, this.name],
+		});
+
+		if (!categoris) throw new Error(`could't create category ${this.name} with id ${this.id}`);
+
+		return categoris[0];
 	}
 }

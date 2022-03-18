@@ -3,30 +3,21 @@ import supertest from "supertest";
 import User, { IUser } from "../user";
 import { Connection } from "../../util/models/database";
 import app from "../../server";
+import * as InitData from "./initSpec";
 
 const request = supertest(app);
 
-describe("User Model: ", () => {
-	const u: IUser = {
-		email: "email@example.com",
-		firstname: "dev",
-		lastname: "ts",
-		password: "test123",
-	};
+export const u: IUser = {
+	id: 2,
+	email: "email@example2.com",
+	firstname: "dev",
+	lastname: "ts",
+	password: "test123",
+};
 
-	const uToken = User.generateToken(u);
+export const uToken = User.generateToken(u);
 
-	beforeAll(async function () {
-		try {
-			const q = `TRUNCATE users RESTART IDENTITY CASCADE;`;
-			if (Connection.ENV == "test") await Connection.excute<void>({ q });
-			return;
-		} catch (err) {
-			console.log(err);
-			return;
-		}
-	});
-
+describe("User Module: ", () => {
 	describe("Model: ", () => {
 		it("should generate valid token", () => {
 			expect(User.veifyToken(uToken)).toBe(true);
@@ -35,7 +26,7 @@ describe("User Model: ", () => {
 		it("should create User", async () => {
 			const user = new User(u.email, String(u.password), u.firstname, u.lastname);
 			expect(await user.create()).toEqual({
-				id: 1,
+				id: u.id,
 				firstname: u.firstname,
 				lastname: u.lastname,
 				email: u.email,
@@ -45,7 +36,7 @@ describe("User Model: ", () => {
 		it("should retrive User", async () => {
 			const user = await User.show(u.email);
 			expect(user).toEqual({
-				id: 1,
+				id: u.id,
 				firstname: u.firstname,
 				lastname: u.lastname,
 				email: u.email,
@@ -64,11 +55,21 @@ describe("User Model: ", () => {
 
 		it("should retrive all users", async () => {
 			const users = await User.index();
-			expect(users?.length).toEqual(1);
+			expect(users?.length).toBeTruthy();
 		});
 	});
 
 	describe("EndPoints: ", () => {
+		describe("Login", () => {
+			it("should return valid token", async () => {
+				const res = await request.post("/users/login").send({
+					email: InitData.USER.email,
+					password: InitData.USER.password,
+				});
+				expect(User.veifyToken(String(res.body))).toBeTrue();
+			});
+		});
+
 		describe("Create:", () => {
 			it("require Token", async () => {
 				await request.post("/users").expect(417);
@@ -76,8 +77,8 @@ describe("User Model: ", () => {
 
 			describe("Validate Data:", () => {
 				it("validate password", async () => {
-					const req = await request.post("/users").set("token", uToken).send({
-						email: "testMisignPssword",
+					const req = await request.post("/users").set("token", InitData.USERTOKEN).send({
+						email: "failed@test",
 						firstname: "fname",
 						lastname: "lname",
 					});
@@ -85,23 +86,28 @@ describe("User Model: ", () => {
 				});
 
 				it("validate email", async () => {
-					const req = await request.post("/users").set("token", uToken).send({
-						firstname: "fname",
-						lastname: "lname",
+					const req = await request.post("/users").set("token", InitData.USERTOKEN).send({
+						firstname: "faild",
+						lastname: "test",
 						password: "password",
 					});
 					expect(req.status).toBe(400);
 				});
 
 				it("Check if email already exists", async () => {
-					const req = await request.post("/users").set("token", uToken).send(u);
+					const req = await request.post("/users").set("token", InitData.USERTOKEN).send(InitData.USER);
 					expect(req.status).toBe(400);
 				});
 			});
 
 			it("create user", async () => {
-				u.email = "email2@example.com";
-				const req = await request.post("/users").set("token", uToken).send(u);
+				const newUser = {
+					email: "email@example3.com",
+					password: "password",
+					firstname: "name",
+					lastname: "lastname",
+				};
+				const req = await request.post("/users").set("token", InitData.USERTOKEN).send(newUser);
 				expect(req.status).toBe(201);
 			});
 		});
@@ -112,7 +118,7 @@ describe("User Model: ", () => {
 			});
 
 			it("get users", async () => {
-				const req = await request.get("/users").set("token", uToken);
+				const req = await request.get("/users").set("token", InitData.USERTOKEN);
 				expect(req.status).toBe(200);
 				expect(req.body.length).toBeTruthy();
 			});
@@ -129,14 +135,14 @@ describe("User Model: ", () => {
 			});
 
 			it("get user", async () => {
-				const req = await request.get(`/users/${u.email}`).set("token", uToken);
+				const req = await request.get(`/users/${InitData.USER.email}`).set("token", InitData.USERTOKEN);
 				expect(req.status).toBe(200);
 				expect(req.body).toEqual({
 					user: {
-						id: 2,
-						firstname: u.firstname,
-						lastname: u.lastname,
-						email: u.email,
+						id: InitData.USER.id,
+						firstname: InitData.USER.firstname,
+						lastname: InitData.USER.lastname,
+						email: InitData.USER.email,
 					},
 				});
 			});

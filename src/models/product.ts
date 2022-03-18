@@ -50,10 +50,11 @@ class ProdactStore {
 	}
 
 	async create(p: Product): Promise<Product[]> {
-		const q = `INSERT INTO ${this.table} (name, price, category_id) VALUES($1, $2, $3);`;
+		const q = `INSERT INTO ${this.table} (name, price, category_id) VALUES($1, $2, $3) returning id; `;
 		try {
 			const conn = await Clint.connect();
-			await conn.query(q, [p.name, p.price, p.category.id]);
+			const newProducts = await conn.query(q, [p.name, p.price, p.category.id]);
+			p.id = newProducts.rows[0].id;
 			return [p];
 		} catch (err) {
 			console.log(err);

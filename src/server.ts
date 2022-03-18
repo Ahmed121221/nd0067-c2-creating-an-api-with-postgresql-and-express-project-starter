@@ -15,17 +15,18 @@ user_routes(app);
 orders_routes(app);
 
 const userApi = [
-	"post: /user/login? : (email, password)=> getToken",
-	"post: /user? : (email, password, firstName, lastName) => getToken",
-	"get: /users : => []users",
+	"post: /user/login : (email, password)=> getToken",
+	"post: /user : (email, password, firstName, lastName) => getToken",
+	"get: /users : => [] users",
 	"get: /users/:email => user",
 ];
 
 const productApi = [
-	"post: /products? : (name, price, category_id ) => []product",
+	"post: /products : (name, price, category_id ) => []product",
 	"get: /products : => []product",
 	"get: /products/:id => product",
 ];
+const categories = ["post: /product/categories : (id:number, name:string)", "get: /product/categories/:id"];
 
 const orderApi = [
 	"post: /orders? : (user_id,product_id,quantity) => product",
@@ -38,6 +39,7 @@ app.get("/", function (req: Request, res: Response) {
 		endPoints: {
 			users: userApi,
 			products: productApi,
+			categories,
 			orders: orderApi,
 		},
 	});

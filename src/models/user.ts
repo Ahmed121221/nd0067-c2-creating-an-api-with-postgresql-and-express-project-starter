@@ -92,7 +92,7 @@ export default class User {
 	}
 
 	static generateToken(u: IUser): string {
-		return jwt.sign({ user: u }, String(process.env.TOKEN_KEY));
+		return jwt.sign({ user: { email: u.email, firstname: u.firstname } }, String(process.env.TOKEN_KEY));
 	}
 
 	static veifyToken(token: string): boolean {

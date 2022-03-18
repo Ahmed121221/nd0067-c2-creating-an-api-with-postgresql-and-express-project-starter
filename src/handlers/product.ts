@@ -1,9 +1,10 @@
 import { Request, Response, Application } from "express";
 
 import ProdactsStore, { Product } from "../models/product";
-import validitors from "../middlewares/validatores/product";
+import validitors, { showProduct as idValidation } from "../middlewares/validatores/product";
 import ProductCategory from "../models/productCategory";
 import auth from "../middlewares/authentication";
+import categories_routes from "./categories";
 
 async function index(req: Request, res: Response): Promise<void> {
 	try {
@@ -28,7 +29,7 @@ async function show(req: Request, res: Response): Promise<void> {
 
 async function create(req: Request, res: Response): Promise<void> {
 	try {
-		const { name, price, category_id } = req.query;
+		const { name, price, category_id } = req.body;
 		const productStore = new ProdactsStore();
 
 		const pc: ProductCategory = new ProductCategory(String(name), Number(price), Number(category_id));
@@ -45,9 +46,11 @@ async function create(req: Request, res: Response): Promise<void> {
 }
 
 const products_routes = (app: Application): void => {
-	app.get("/products/:id", show);
+	app.get("/products/:id", idValidation, show);
 	app.get("/products", index);
 	app.post("/products", auth, validitors, create);
+
+	categories_routes("/products", app);
 };
 
 export default products_routes;

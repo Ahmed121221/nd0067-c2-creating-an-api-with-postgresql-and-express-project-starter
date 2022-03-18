@@ -2,18 +2,19 @@ import supertest from "supertest";
 
 import User, { IUser } from "../user";
 import { Connection } from "../../util/models/database";
-import auth from "../../middlewares/authentication";
 import app from "../../server";
 
 const request = supertest(app);
 
-describe("User Model : ", () => {
+describe("User Model: ", () => {
 	const u: IUser = {
-		email: "test@test.com",
+		email: "email@example.com",
 		firstname: "dev",
 		lastname: "ts",
 		password: "test123",
 	};
+
+	const uToken = User.generateToken(u);
 
 	beforeAll(async function () {
 		try {
@@ -26,10 +27,9 @@ describe("User Model : ", () => {
 		}
 	});
 
-	describe("Model : ", () => {
+	describe("Model: ", () => {
 		it("should generate valid token", () => {
-			const token = User.generateToken(u);
-			expect(User.veifyToken(token)).toBe(true);
+			expect(User.veifyToken(uToken)).toBe(true);
 		});
 
 		it("should create User", async () => {
@@ -68,29 +68,78 @@ describe("User Model : ", () => {
 		});
 	});
 
-	fdescribe("EndPoints", () => {
-		describe("Create", () => {
+	describe("EndPoints: ", () => {
+		describe("Create:", () => {
 			it("require Token", async () => {
-				await request.post("localhost:3000/users").expect(417);
-				// expect(res.status).toBe(417);
+				await request.post("/users").expect(417);
 			});
 
-			// it("validate data", async () => {
-			// 	const res = await request.post(
-			// 		"localhost:3000/users?email=test@test.com&firestName=fname&lastName=lname&password=test"
-			// 	);
-			// 	expect(res.status).toBe(417);
-			// });
+			describe("Validate Data:", () => {
+				it("validate password", async () => {
+					const req = await request.post("/users").set("token", uToken).send({
+						email: "testMisignPssword",
+						firstname: "fname",
+						lastname: "lname",
+					});
+					expect(req.status).toBe(400);
+				});
 
-			// it("create user", () => {});
+				it("validate email", async () => {
+					const req = await request.post("/users").set("token", uToken).send({
+						firstname: "fname",
+						lastname: "lname",
+						password: "password",
+					});
+					expect(req.status).toBe(400);
+				});
+
+				it("Check if email already exists", async () => {
+					const req = await request.post("/users").set("token", uToken).send(u);
+					expect(req.status).toBe(400);
+				});
+			});
+
+			it("create user", async () => {
+				u.email = "email2@example.com";
+				const req = await request.post("/users").set("token", uToken).send(u);
+				expect(req.status).toBe(201);
+			});
 		});
-		// describe("Index", () => {
-		// 	it("require Token", () => {});
-		// 	it("get users", () => {});
-		// });
-		// describe("show", () => {
-		// 	it("require Token", () => {});
-		// 	it("show user", () => {});
-		// });
+
+		describe("Index:", () => {
+			it("require Token", async () => {
+				await request.get("/users").expect(417);
+			});
+
+			it("get users", async () => {
+				const req = await request.get("/users").set("token", uToken);
+				expect(req.status).toBe(200);
+				expect(req.body.length).toBeTruthy();
+			});
+		});
+
+		describe("Show:", () => {
+			it("require Token", async () => {
+				await request.get(`/users/${u.id}`).expect(417);
+			});
+
+			it("require valid Token", async () => {
+				const invaildToken = uToken + "vfjvbd";
+				await request.get(`/users/${u.id}`).set("token", invaildToken).expect(401);
+			});
+
+			it("get user", async () => {
+				const req = await request.get(`/users/${u.email}`).set("token", uToken);
+				expect(req.status).toBe(200);
+				expect(req.body).toEqual({
+					user: {
+						id: 2,
+						firstname: u.firstname,
+						lastname: u.lastname,
+						email: u.email,
+					},
+				});
+			});
+		});
 	});
 });

@@ -18,8 +18,9 @@ async function index(req: Request, res: Response): Promise<void> {
 
 async function show(req: Request, res: Response): Promise<void> {
 	const email = String(req.params.email);
-
 	try {
+		if (email == undefined) throw new Error("Invalid email");
+
 		const user = await User.show(email);
 		if (!user) {
 			res.status(404).json(`email: ${email} dose not exists.`);
@@ -27,8 +28,8 @@ async function show(req: Request, res: Response): Promise<void> {
 		}
 		res.status(200).json({ user });
 	} catch (err) {
-		console.log("Handler : product.index() => ", err);
-		res.status(500).json({ error: "coulde't fetch Users." });
+		const errMsg = err instanceof Error ? err.message : err;
+		res.status(500).json({ error: `coulde't fetch User. ${errMsg}` });
 	}
 }
 
@@ -70,7 +71,7 @@ async function create(req: Request, res: Response): Promise<void> {
 		}
 		const createdUser = await user.create();
 		const token = jwt.sign({ user: createdUser }, String(process.env.TOKEN_KEY));
-		res.status(200).json(token);
+		res.status(201).json(token);
 	} catch (err) {
 		console.log("Handler : product.index() => ", err);
 		res.status(500).json(err instanceof Error ? err.message : "coulde't create User.");

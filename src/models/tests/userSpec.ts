@@ -1,7 +1,6 @@
 import supertest from "supertest";
 
 import User, { IUser } from "../user";
-import { Connection } from "../../util/models/database";
 import app from "../../server";
 import * as InitData from "./initSpec";
 

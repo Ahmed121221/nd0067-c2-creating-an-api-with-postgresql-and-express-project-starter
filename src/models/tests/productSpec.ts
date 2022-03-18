@@ -1,10 +1,7 @@
 import supertest from "supertest";
 
-import User, { IUser } from "../user";
-import { Connection } from "../../util/models/database";
 import app from "../../server";
 
-import { uToken } from "./userSpec";
 import ProdactStore, { Product } from "../product";
 
 import * as InitData from "./initSpec";
@@ -17,7 +14,7 @@ const p: Product = {
 	category: InitData.CATEGORY,
 };
 
-fdescribe("Product Model: ", () => {
+describe("Product Model: ", () => {
 	describe("Model: ", () => {
 		it("should create product", async () => {
 			const newProduct = await new ProdactStore().create(p);
@@ -26,12 +23,12 @@ fdescribe("Product Model: ", () => {
 
 		it("should get all products.", async () => {
 			const newProducts = await new ProdactStore().index();
-			expect(newProducts?.length).toBe(2);
+			expect(newProducts?.length).toBe(3);
 		});
 
-		it("shold show product with given id.", async () => {
-			const newProducts = await new ProdactStore().index();
-			expect(newProducts?.length).toBe(2);
+		it("shold show product with a given id.", async () => {
+			const newProducts = await new ProdactStore().show(1);
+			expect(newProducts?.length).toBe(1);
 		});
 	});
 
@@ -76,14 +73,13 @@ fdescribe("Product Model: ", () => {
 				// this test debends on Model : should create product test
 				const p = { name: "product2", price: 106, category_id: InitData.CATEGORY.id };
 				const res = await request.post(`/products`).set("token", InitData.USERTOKEN).send(p);
-				expect(res.body).toEqual([
-					{
-						id: 3,
-						name: p.name,
-						price: p.price,
-						category: InitData.CATEGORY,
-					},
-				]);
+				const { name, price, category } = res.body[0];
+				const resProduct = { name, price, category };
+				expect(resProduct).toEqual({
+					name: p.name,
+					price: p.price,
+					category: InitData.CATEGORY,
+				});
 				expect(res.status).toBe(200);
 			});
 		});

@@ -172,7 +172,6 @@ class OrderModel {
 		let order;
 		const exiProductQty = await OrderModel.checkProduct(order_id, product_id);
 		if (exiProductQty) {
-			console.log("should be true ", exiProductQty);
 			const newQty = exiProductQty + product_qty;
 			console.log(newQty);
 			order = await OrderModel.addToExistsProduct(order_id, product_id, newQty);

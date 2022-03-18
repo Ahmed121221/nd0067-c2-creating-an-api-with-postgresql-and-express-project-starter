@@ -24,16 +24,25 @@ export const PRODUCT: Product = {
 	category: CATEGORY,
 };
 
+export const PRODUCT2: Product = {
+	id: 2,
+	name: "product",
+	price: 99,
+	category: CATEGORY,
+};
+
 export const USERTOKEN = User.generateToken(USER);
 
-const restTables = `TRUNCATE categories, status, users, products  RESTART IDENTITY CASCADE;`;
+const restTables = `TRUNCATE categories, status, users, products, orders, products_orders  RESTART IDENTITY CASCADE;`;
 const createStatus_q = "insert into status (id, name) values ($1, $2), ($3, $4)";
 
 async function initData(): Promise<void> {
 	if (Connection.ENV == "test") {
 		await Connection.excute<void>({ q: restTables });
+
 		await new Category(CATEGORY.id, CATEGORY.name).create();
 		await new ProdactStore().create(PRODUCT);
+		await new ProdactStore().create(PRODUCT2);
 
 		await Connection.excute<void>({ q: createStatus_q, params: [1, "active", 2, "complete"] });
 		await new User(USER.email, String(USER.password), USER.firstname, USER.lastname).create();

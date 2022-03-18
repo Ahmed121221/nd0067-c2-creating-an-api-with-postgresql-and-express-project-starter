@@ -1,16 +1,23 @@
 import { Request, Response, NextFunction } from "express";
-import ProductCategory from "../../models/productCategory";
+import User from "../../models/user";
 
-export function creat(req: Request, res: Response, next: NextFunction) {
-	const query = req.query;
+export function userValidators(req: Request, res: Response, next: NextFunction) {
+	const query = req.body;
 
-	for (const attr of ProductCategory.mustAttributes) {
-		if (query[attr] == undefined) {
+	for (const attr of User.mustAttributes) {
+		const attrValue = query[attr];
+
+		if (attrValue == undefined) {
 			res.status(400).json(`${attr} Must Be Exists.`);
 			return;
 		}
 
-		if (attr == "name" && typeof query[attr] !== "string") {
+		if (attrValue == "") {
+			res.status(400).json(`Attribute ${attr} value's is empty.`);
+			return;
+		}
+
+		if (typeof attrValue !== "string") {
 			res.status(400).json(`${attr} Must Be A string.`);
 			return;
 		}
@@ -24,5 +31,3 @@ export function creat(req: Request, res: Response, next: NextFunction) {
 
 	next();
 }
-
-export default [creat];

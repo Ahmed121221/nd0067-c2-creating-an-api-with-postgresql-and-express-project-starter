@@ -20,13 +20,7 @@ export default class ProductCategory {
 
 	static readonly mustAttributes: string[] = ["name", "price", "category_id"];
 
-	constructor(
-		name: string,
-		price: number,
-		category_id: number,
-		category_name?: string,
-		id?: number
-	) {
+	constructor(name: string, price: number, category_id: number, category_name?: string, id?: number) {
 		this._id = id;
 		this._name = name;
 		this._price = price;
@@ -49,8 +43,6 @@ export default class ProductCategory {
 
 	static toProducts(pc: IProductCategory[]): Product[] {
 		// Todo : make sure data is what it ment to be.
-		return pc.map(i =>
-			new ProductCategory(i.name, i.price, i.category_id, i.category_name, i.id).toProduct()
-		);
+		return pc.map(i => new ProductCategory(i.name, i.price, i.category_id, i.category_name, i.id).toProduct());
 	}
 }

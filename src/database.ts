@@ -1,4 +1,5 @@
 import { Pool } from "pg";
+import "dotenv/config";
 
 enum DB_ENV {
 	test = "test",
@@ -24,9 +25,9 @@ switch (NODE_ENV) {
 
 const Clint = new Pool({
 	database: db_name,
-	host: HOST,
-	user: USERNAME,
-	password: PASSWORD,
+	host: String(HOST),
+	user: String(USERNAME),
+	password: String(PASSWORD),
 });
 
 export default Clint;

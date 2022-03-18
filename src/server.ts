@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
-import "dotenv/config";
 
 import products_routes from "./handlers/product";
 import user_routes from "./handlers/user";
@@ -48,3 +47,5 @@ app.listen(3000, function () {
 	console.log(`starting app on: ${address}`);
 	console.log(process.env.NODE_ENV);
 });
+
+export default app;

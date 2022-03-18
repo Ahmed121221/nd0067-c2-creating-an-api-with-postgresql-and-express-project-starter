@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 
 import { Quiry, Connection } from "../util/models/database";
+import jwt from "jsonwebtoken";
 
 const { SALT_ROUNDS: ROUNDS, BCRYPT_PASSWORD: PEPPAR } = process.env;
 export interface IUser {
@@ -8,9 +9,10 @@ export interface IUser {
 	password?: string;
 
 	email: string;
-	lastName: string;
-	firstName: string;
+	lastname: string;
+	firstname: string;
 }
+
 export default class User {
 	static readonly tableName = "users";
 
@@ -20,14 +22,14 @@ export default class User {
 	private _firstName?: string;
 	private _lastName?: string;
 
-	static readonly mustAttributes: string[] = ["email", "password", "firstName", "lastName"];
+	static readonly mustAttributes: string[] = ["email", "password", "firstname", "lastname"];
 
 	constructor(email: string, password: string, firstName?: string, lastName?: string) {
-		this._email = email;
-		this._password = password;
+		this._email = email.trim();
+		this._password = password.trim();
 
-		this._firstName = firstName;
-		this._lastName = lastName;
+		this._firstName = firstName?.trim();
+		this._lastName = lastName?.trim();
 	}
 
 	get email() {
@@ -80,13 +82,26 @@ export default class User {
 		const query: Quiry = {
 			q: `select  id,
 	                    email,
-	                    lastname,
-	                    firstname
+	                    lastname as lastName,
+	                    firstname as firstName
 	            from ${User.tableName}
                 where email='${email}';`,
 		};
 		const users = await Connection.excute<IUser>(query);
 		return users ? users[0] : null;
+	}
+
+	static generateToken(u: IUser): string {
+		return jwt.sign({ user: u }, String(process.env.TOKEN_KEY));
+	}
+
+	static veifyToken(token: string): boolean {
+		try {
+			jwt.verify(token, String(process.env.TOKEN_KEY));
+			return true;
+		} catch (err) {
+			return false;
+		}
 	}
 
 	async create(): Promise<IUser | null> {
@@ -96,8 +111,7 @@ export default class User {
                       email,
                       password)
                    VALUES ($1, $2, $3, $4) 
-                   returning id, firstname, lastname, email;`;
-
+                   returning firstname as firstName, lastname as lastName, email, id;`;
 		const users = await Connection.excute<IUser>({
 			q,
 			params: [this._firstName, this._lastName, this._email, await this.hashPassword()],

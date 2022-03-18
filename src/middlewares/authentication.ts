@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import "dotenv/config";
+
+import User from "../models/user";
 
 function checkToken(req: Request, res: Response, next: NextFunction) {
 	if (req.headers.token === undefined || req.headers.token == "") {
@@ -13,13 +14,13 @@ function checkToken(req: Request, res: Response, next: NextFunction) {
 function validateToken(req: Request, res: Response, next: NextFunction) {
 	const token = req.headers.token as string;
 
-	try {
-		jwt.verify(token, String(process.env.TOKEN_KEY));
-		next();
-	} catch (err) {
+	if (!User.veifyToken(token)) {
 		res.status(401);
 		res.json("Access denied, invalid token.");
+		return;
 	}
+
+	next();
 }
 
 export default [checkToken, validateToken];

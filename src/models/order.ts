@@ -1,5 +1,4 @@
-import { Quiry, Connection } from "../util/models/database";
-import Clint from "../database";
+import { Connection } from "../util/models/database";
 
 interface Product {
 	id: number;
@@ -169,11 +168,7 @@ class OrderModel {
 		return result ? result[0].quantity : null;
 	}
 
-	static async addProduct(
-		order_id: number,
-		product_id: number,
-		product_qty: number
-	): Promise<DbOrder | null> {
+	static async addProduct(order_id: number, product_id: number, product_qty: number): Promise<DbOrder | null> {
 		let order;
 		const exiProductQty = await OrderModel.checkProduct(order_id, product_id);
 		if (exiProductQty) {

@@ -1,4 +1,5 @@
 import Clint from "../../database";
+import "dotenv/config";
 
 export type Quiry = {
 	q: string;
@@ -6,6 +7,8 @@ export type Quiry = {
 };
 
 export class Connection {
+	static ENV = process.env.NODE_ENV;
+
 	static async excute<T>(quiry: Quiry): Promise<T[] | null> {
 		// if data dose not exist function will return null.
 		try {

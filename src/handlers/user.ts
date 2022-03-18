@@ -4,6 +4,7 @@ import "dotenv/config";
 
 import User from "../models/user";
 import auth from "../middlewares/authentication";
+import { userValidators } from "../middlewares/validatores/user";
 
 async function index(req: Request, res: Response): Promise<void> {
 	try {
@@ -32,8 +33,8 @@ async function show(req: Request, res: Response): Promise<void> {
 }
 
 async function login(req: Request, res: Response): Promise<void> {
-	const { email, password } = req.query;
-
+	console.log(req);
+	const { email, password } = req.body;
 	if (password === undefined || email === undefined) {
 		res.status(400);
 		res.json("Email And Password Are Required As An Quiry Pramters.");
@@ -41,7 +42,8 @@ async function login(req: Request, res: Response): Promise<void> {
 	}
 
 	try {
-		const user = await new User(email as string, password as string).authenticate();
+		console.log(email, " ", password);
+		const user = await new User(String(email), String(password)).authenticate();
 		if (!user) {
 			res.status(404);
 			res.json(`Incorrect Password.`);
@@ -57,21 +59,15 @@ async function login(req: Request, res: Response): Promise<void> {
 }
 
 async function create(req: Request, res: Response): Promise<void> {
-	const { email, password, firstName, lastName } = req.query;
+	const { email, password, firstname, lastname } = req.body;
 
-	const user = new User(
-		email as string,
-		password as string,
-		firstName as string,
-		lastName as string
-	);
+	const user = new User(email as string, password as string, firstname as string, lastname as string);
 
 	try {
 		if (await user.getHasedPassword()) {
 			res.status(400).json(`Email : ${user.email} is already registerd`);
 			return;
 		}
-
 		const createdUser = await user.create();
 		const token = jwt.sign({ user: createdUser }, String(process.env.TOKEN_KEY));
 		res.status(200).json(token);
@@ -85,7 +81,7 @@ const user_routes = (app: Application): void => {
 	app.get("/users/:email", auth, show);
 	app.get("/users", auth, index);
 	app.post("/users/login", login);
-	app.post("/users", auth, create);
+	app.post("/users", auth, userValidators, create);
 };
 
 export default user_routes;

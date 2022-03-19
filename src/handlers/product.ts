@@ -11,7 +11,6 @@ async function index(req: Request, res: Response): Promise<void> {
 		const products = await new ProdactsStore().index();
 		res.status(200).json(products);
 	} catch (err) {
-		console.log("Handler : product.index() => ", err);
 		res.status(500).json({ error: "coulde't fetch Products." });
 	}
 }
@@ -40,7 +39,6 @@ async function create(req: Request, res: Response): Promise<void> {
 
 		res.status(200).json(createdProduct);
 	} catch (err) {
-		console.log(err);
 		res.status(404).json(err instanceof Error ? err.message : "somthing wrong Happend, please try again later.");
 	}
 }

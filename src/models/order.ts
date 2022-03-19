@@ -71,7 +71,6 @@ class OrderModel {
 	}
 
 	static async userOrders(user_id: number, status: string) {
-		console.log(status);
 		const q = `select o.id as id,
                             p.product_id,
                             p.quantity as product_qty,
@@ -109,7 +108,6 @@ class OrderModel {
 			}
 			return null;
 		} catch (err) {
-			console.log(err);
 			throw new Error(`could't create order: ${err}`);
 		}
 	}
@@ -152,7 +150,6 @@ class OrderModel {
 			const Product_order = await Connection.excute<DbOrder>({ q });
 			return Product_order ? Product_order[0] : null;
 		} catch (err) {
-			console.log(err);
 			throw new Error(`could't add product to the order: ${err}`);
 		}
 	}
@@ -173,7 +170,6 @@ class OrderModel {
 		const exiProductQty = await OrderModel.checkProduct(order_id, product_id);
 		if (exiProductQty) {
 			const newQty = exiProductQty + product_qty;
-			console.log(newQty);
 			order = await OrderModel.addToExistsProduct(order_id, product_id, newQty);
 		} else {
 			order = await OrderModel.addNewProduct(order_id, product_id, product_qty);
@@ -186,7 +182,6 @@ class OrderModel {
 		try {
 			await Connection.excute<DbOrder>({ q });
 		} catch (err) {
-			console.log(err);
 			throw new Error(`could't delete order: ${err}`);
 		}
 	}

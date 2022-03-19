@@ -20,13 +20,13 @@ async function activeOrders(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
-	const user_id = Number(req.query.user_id);
-	const product_id = Number(req.query.product_id);
-	const product_qty = Number(req.query.quantity);
+	const user_id = Number(req.body.user_id);
+	const product_id = Number(req.body.product_id);
+	const product_qty = Number(req.body.quantity);
 
 	try {
 		const order_id = await OrderModel.create({ product_id, product_qty, user_id });
-		res.status(200);
+		res.status(201);
 		res.json({ order_id });
 	} catch (err) {
 		res.status(400);
@@ -37,9 +37,9 @@ async function create(req: Request, res: Response) {
 }
 
 async function addProductToOrder(req: Request, res: Response) {
-	const order_id = Number(req.query.order_id);
-	const product_id = Number(req.query.product_id);
-	const product_qty = Number(req.query.quantity);
+	const order_id = Number(req.body.order_id);
+	const product_id = Number(req.body.product_id);
+	const product_qty = Number(req.body.quantity);
 
 	try {
 		const orders = await OrderModel.addProduct(order_id, product_id, product_qty);
@@ -58,7 +58,7 @@ const createParams = ["user_id", "product_id", "quantity"];
 
 const orders_routes = (app: Application) => {
 	app.get("/orders/:user_id/:status", auth, user_status_validitor, activeOrders);
-	app.post("/orders", chekQuiryParams(createParams), create);
+	app.post("/orders", auth, chekQuiryParams(createParams), create);
 	app.post("/orders/add", chekQuiryParams(addProductParams), addProductToOrder);
 };
 

@@ -14,8 +14,6 @@ async function create(req: Request, res: Response): Promise<void> {
 		res.json({ category: category });
 	} catch (err) {
 		const errMsg = err instanceof Error ? err.message : "could't create category";
-
-		console.log(err);
 		res.status(400);
 		res.json({ err: errMsg });
 	}

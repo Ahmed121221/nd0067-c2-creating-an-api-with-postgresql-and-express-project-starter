@@ -57,7 +57,6 @@ class ProdactStore {
 			p.id = newProducts.rows[0].id;
 			return [p];
 		} catch (err) {
-			console.log(err);
 			throw new Error(`could't create product: ${p}`);
 		}
 	}

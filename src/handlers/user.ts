@@ -11,7 +11,6 @@ async function index(req: Request, res: Response): Promise<void> {
 		const products = await User.index();
 		res.status(200).json(products);
 	} catch (err) {
-		console.log("Handler : product.index() => ", err);
 		res.status(500).json({ error: "coulde't fetch Users." });
 	}
 }
@@ -34,7 +33,6 @@ async function show(req: Request, res: Response): Promise<void> {
 }
 
 async function login(req: Request, res: Response): Promise<void> {
-	console.log(req);
 	const { email, password } = req.body;
 	if (password === undefined || email === undefined) {
 		res.status(400);
@@ -43,7 +41,6 @@ async function login(req: Request, res: Response): Promise<void> {
 	}
 
 	try {
-		console.log(email, " ", password);
 		const user = await new User(String(email), String(password)).authenticate();
 		if (!user) {
 			res.status(404);
@@ -73,7 +70,6 @@ async function create(req: Request, res: Response): Promise<void> {
 		const token = jwt.sign({ user: createdUser }, String(process.env.TOKEN_KEY));
 		res.status(201).json(token);
 	} catch (err) {
-		console.log("Handler : product.index() => ", err);
 		res.status(500).json(err instanceof Error ? err.message : "coulde't create User.");
 	}
 }

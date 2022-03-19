@@ -25,18 +25,15 @@ function validateOrderStatus(req: Request, res: Response, next: NextFunction) {
 }
 
 export function chekQuiryParams(params: string[]) {
-	console.log("params ", params);
 	return (req: Request, res: Response, next: NextFunction) => {
-		// const quiry_keys = ["order_id", "product_id", "quantity"];
-
 		for (const key of params) {
 			res.status(400);
-			if (req.query[key] == undefined) {
+			if (req.body[key] == undefined) {
 				res.json(`you must include ${key} to quiry params.`);
 				return;
 			}
 
-			const numKey = Number(req.query[key]);
+			const numKey = Number(req.body[key]);
 
 			if (isNaN(numKey)) {
 				res.json(`${key} must be a number.`);

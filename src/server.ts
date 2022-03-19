@@ -46,8 +46,7 @@ app.get("/", function (req: Request, res: Response) {
 });
 
 app.listen(3000, function () {
-	console.log(`starting app on: ${address}`);
-	console.log(process.env.NODE_ENV);
+	console.log(`starting app on: ${address} with ${process.env.NODE_ENV} database.`);
 });
 
 export default app;

@@ -50,7 +50,9 @@ TOKEN_KEY =String
 
 Store is a postgres,express/nodejs project tested with [jasmine](https://www.npmjs.com/package/jasmine)/[supertest](https://www.npmjs.com/package/supertest), protected with [jwt](https://www.npmjs.com/package/jsonwebtoken),[bcrypt](https://www.npmjs.com/package/bcrypt) and suported by eslint/prittier, it manage stores orders and products.
 
-#To send Token
+## API :
+
+#To send Token:
 
 ```
 1-add key token to rquest header.
@@ -108,8 +110,6 @@ Store is a postgres,express/nodejs project tested with [jasmine](https://www.npm
   "post: /product/categories : (id:number, name:string)",
    "get: /product/categories/:id"
 ```
-
-Requsted images will be cached in public/thumb directory to save your resources.
 
 ## scripts
 

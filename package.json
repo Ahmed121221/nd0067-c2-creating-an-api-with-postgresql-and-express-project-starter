@@ -12,7 +12,8 @@
     "tsc": "tsc",
     "build": "npm run lint && npx tsc",
     "test": "jasmine-ts",
-    "test-build": "npm run build && npm run test"
+    "test-build": "npm run build && npm run test",
+    "start-build": "node ./dist/server.js"
   },
   "author": "Udacity",
   "license": "ISC",

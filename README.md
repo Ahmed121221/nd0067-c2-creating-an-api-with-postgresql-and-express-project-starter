@@ -21,9 +21,9 @@ as the fallwing names and data types (after equal operator) :
 
 ```
 // database name for developing.
-DB_NAME =store
+DB_NAME =String
 // database name for testing.
-DB_TEST_NAME =store_test
+DB_TEST_NAME =String
 
 // postgress username and password.
 USERNAME =String

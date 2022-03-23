@@ -6,13 +6,13 @@
   "scripts": {
     "lint": "eslint --ignore-path .gitignore --ext .ts --fix .",
     "format": "prettier --ignore-path .gitignore --write **.ts",
-    "clean-code":"npm run format && npm run lint",
+    "clean-code": "npm run format && npm run lint",
     "start": "nodemon src/server.ts",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "tsc": "tsc",
-    "build": "npm run lint && npx tsc",
-    "test": "jasmine-ts",
-    "test-build": "npm run build && npm run test",
+    "build": "npx tsc",
+    "test": "db-migrate --env test up &&  npm run build && NODE_ENV=test jasmine-ts  && db-migrate --env test reset",
+    "migrate-build": "db-migrate up && npm run build",
     "start-build": "node ./dist/server.js"
   },
   "author": "Udacity",

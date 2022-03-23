@@ -1,1 +1,1 @@
-drop table if exists status;
+drop table if exists orders cascade;

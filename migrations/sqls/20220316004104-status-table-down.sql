@@ -1,1 +1,1 @@
-drop table if  exists status
+DROP TABLE if exists status cascade;

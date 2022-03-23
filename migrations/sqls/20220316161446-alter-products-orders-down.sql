@@ -1,2 +1,2 @@
 ALTER TABLE
-    product_unique_per_order drop CONSTRAINT product_unique;
+    IF EXISTS products_orders drop CONSTRAINT product_unique_per_order;

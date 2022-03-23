@@ -5,6 +5,8 @@ import products_routes from "./handlers/product";
 import user_routes from "./handlers/user";
 import orders_routes from "./handlers/order";
 
+// import "dotenv/config";
+
 const app: express.Application = express();
 const address = "0.0.0.0:3000";
 

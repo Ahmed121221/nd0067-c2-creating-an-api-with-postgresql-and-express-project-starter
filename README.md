@@ -128,11 +128,17 @@ npm run start
 build and test project:
 
 ```
-npm run test-build
+npm run test
 ```
 
 build from typescript to javascript:
 
 ```
 npm run build
+```
+
+build and run migrations on ${NODE_ENV} database.
+
+```
+npm run migrate-build
 ```

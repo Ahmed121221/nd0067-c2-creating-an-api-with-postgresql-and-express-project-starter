@@ -10,14 +10,14 @@ Clone Repository.
 git clone https://github.com/Ahmed121221/nd0067-c2-creating-an-api-with-postgresql-and-express-project-starter.git
 ```
 
-Use the package manager [npm](https://www.npmjs.com) to install dependencies.
+Use [npm](https://www.npmjs.com) to install dependencies.
 
 ```bash
 npm i
 ```
 
-create .env file to store environment variable
-as the fallwing names and data types (after equal operator) :
+create .env file to store environment variables
+as the following names and data types(after equal operator) :
 
 ```
 // database name for developing.
@@ -34,8 +34,8 @@ HOST =String
 // defualt for postgres is 5432.
 POSRT =Number
 
-// this variable indicate wich db the app will work with.
-// it should be test or dev.
+// this variable indicate which database the app will work with.
+// it must be test or dev.
 NODE_ENV =String
 
 // for hashing data
@@ -45,12 +45,16 @@ BCRYPT_PASSWORD =String
 // for JWT prefer Long String.
 TOKEN_KEY =String
 ```
-
-## Description
+## Ports:
+	database : 5432
+	project(server): 3000
+	
+## Description:
 
 Store is a postgres,express/nodejs project tested with [jasmine](https://www.npmjs.com/package/jasmine)/[supertest](https://www.npmjs.com/package/supertest), protected with [jwt](https://www.npmjs.com/package/jsonwebtoken),[bcrypt](https://www.npmjs.com/package/bcrypt) and suported by eslint/prittier, it manage stores orders and products.
 
-## API :
+
+## API:
 
 #To send Token:
 

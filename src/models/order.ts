@@ -167,6 +167,7 @@ class OrderModel {
 
 	static async addProduct(order_id: number, product_id: number, product_qty: number): Promise<DbOrder | null> {
 		let order;
+		// ckeck if product exist in order if so return product quantity.
 		const exiProductQty = await OrderModel.checkProduct(order_id, product_id);
 		if (exiProductQty) {
 			const newQty = exiProductQty + product_qty;

@@ -70,10 +70,6 @@ describe("User Module: ", () => {
 		});
 
 		describe("Create:", () => {
-			it("require Token", async () => {
-				await request.post("/users").expect(417);
-			});
-
 			describe("Validate Data:", () => {
 				it("validate password", async () => {
 					const req = await request.post("/users").set("token", InitData.USERTOKEN).send({

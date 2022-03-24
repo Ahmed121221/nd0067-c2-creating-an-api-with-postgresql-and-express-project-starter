@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import products_routes from "./handlers/product";
 import user_routes from "./handlers/user";
 import orders_routes from "./handlers/order";
+import { Connection } from "./util/models/database";
 
 // import "dotenv/config";
 
@@ -16,39 +17,27 @@ products_routes(app);
 user_routes(app);
 orders_routes(app);
 
-const userApi = [
-	"post: /user/login : (email, password)=> getToken",
-	"post: /user : (email, password, firstName, lastName) => getToken",
-	"get: /users : => [] users",
-	"get: /users/:email => user",
-];
-
-const productApi = [
-	"post: /products : (name, price, category_id ) => []product",
-	"get: /products : => []product",
-	"get: /products/:id => product",
-];
-const categories = ["post: /product/categories : (id:number, name:string)", "get: /product/categories/:id"];
-
-const orderApi = [
-	"post: /orders? : (user_id,product_id,quantity) => product",
-	"post: /orders/add? : (order_id,product_id,quantity) => order_id ",
-	"get: /orders/:user_id/:status :  => []order",
-];
-
 app.get("/", function (req: Request, res: Response) {
-	res.json({
-		endPoints: {
-			users: userApi,
-			products: productApi,
-			categories,
-			orders: orderApi,
-		},
-	});
+	res.json(
+		"EndPoints listed in https://github.com/Ahmed121221/nd0067-c2-creating-an-api-with-postgresql-and-express-project-starter/blob/master/README.md"
+	);
 });
 
-app.listen(3000, function () {
+app.listen(3000, async function () {
 	console.log(`starting app on: ${address} with ${process.env.NODE_ENV} database.`);
+	if (process.env.NODE_ENV != "test") {
+		try {
+			const selectStatus_q = "select * from status;";
+			const status = await Connection.excute<{ id: number; name: string }>({ q: selectStatus_q });
+
+			if (!status?.length) {
+				const createStatus_q = "insert into status (id, name) values ($1, $2), ($3, $4)";
+				await Connection.excute<void>({ q: createStatus_q, params: [1, "active", 2, "complete"] });
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	}
 });
 
 export default app;

@@ -20,6 +20,7 @@ async function activeOrders(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
+	console.log("order create: ");
 	const user_id = Number(req.body.user_id);
 	const product_id = Number(req.body.product_id);
 	const product_qty = Number(req.body.quantity);
@@ -47,6 +48,7 @@ async function addProductToOrder(req: Request, res: Response) {
 		res.json(orders);
 	} catch (err) {
 		res.status(400);
+		console.log(err);
 		res.json({
 			error: err instanceof Error ? err.message : "couldn't add producats to order.",
 		});

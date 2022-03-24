@@ -34,6 +34,17 @@ export class Category {
 		return true;
 	}
 
+	async getById(): Promise<ICategory | null> {
+		// check if id in database and assign this.name
+		const q = `select id, name from categories where id =${this._id};`;
+		const query: Quiry = { q };
+		const result = await Connection.excute<ICategory>(query);
+
+		if (!result) return null;
+
+		return result[0];
+	}
+
 	async create(): Promise<ICategory> {
 		const q = `INSERT INTO categories
                      (id, name)

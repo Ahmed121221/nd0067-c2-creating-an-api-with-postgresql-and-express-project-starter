@@ -7,7 +7,7 @@ enum DB_ENV {
 	prodaction = "prodaction",
 }
 
-const { NODE_ENV, DB_NAME, DB_TEST_NAME, USERNAME, PASSWORD, HOST } = process.env;
+const { NODE_ENV, DB_NAME, DB_TEST_NAME, USERNAME, PASSWORD, HOST, PORT } = process.env;
 
 let db_name = "";
 
@@ -28,6 +28,7 @@ const Clint = new Pool({
 	host: String(HOST),
 	user: String(USERNAME),
 	password: String(PASSWORD),
+	port: Number(PORT),
 });
 
 export default Clint;

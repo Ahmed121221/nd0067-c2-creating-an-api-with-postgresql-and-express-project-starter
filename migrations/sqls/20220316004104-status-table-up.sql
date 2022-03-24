@@ -1,1 +1,1 @@
-create table status (id integer primary key, name varchar(10));
+    create table status (id integer primary key, name varchar(10));

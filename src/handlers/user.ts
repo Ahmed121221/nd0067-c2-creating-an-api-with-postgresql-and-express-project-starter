@@ -78,7 +78,7 @@ const user_routes = (app: Application): void => {
 	app.get("/users/:email", auth, show);
 	app.get("/users", auth, index);
 	app.post("/users/login", login);
-	app.post("/users", auth, userValidators, create);
+	app.post("/users", userValidators, create);
 };
 
 export default user_routes;

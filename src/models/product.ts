@@ -44,7 +44,7 @@ class ProdactStore {
 
 		const products = await Connection.excute<IProductCategory>(query);
 
-		if (products == null) throw new Error(`Product with ${id} dose not exist.`);
+		if (products == null) throw new Error(`Product with id ${id} dose not exist.`);
 
 		return ProductCategory.toProducts(products);
 	}

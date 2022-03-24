@@ -29,7 +29,7 @@ export function chekQuiryParams(params: string[]) {
 		for (const key of params) {
 			res.status(400);
 			if (req.body[key] == undefined) {
-				res.json(`you must include ${key} to quiry params.`);
+				res.json(`you must include ${key} to request body.`);
 				return;
 			}
 

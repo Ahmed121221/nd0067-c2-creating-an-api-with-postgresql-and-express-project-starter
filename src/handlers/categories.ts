@@ -20,18 +20,16 @@ async function create(req: Request, res: Response): Promise<void> {
 }
 
 async function show(req: Request, res: Response): Promise<void> {
-	const id = Number(req.body.name);
+	const id = Number(req.params.id);
 	try {
 		if (isNaN(id)) throw new Error("Expected arrtibutes (id:number)");
 
-		const category = await new Category(id).checId();
+		const category = await new Category(id).getById();
 
 		res.status(200);
-		res.json({ category: category });
+		res.json(category);
 	} catch (err) {
 		const errMsg = err instanceof Error ? err.message : "could't create category";
-
-		console.log(err);
 		res.status(400);
 		res.json({ err: errMsg });
 	}

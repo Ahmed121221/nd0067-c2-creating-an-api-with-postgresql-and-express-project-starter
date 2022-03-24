@@ -116,7 +116,8 @@ TOKEN_KEY =String
             ```
         4- Create Product.
             ```
-             "post: /product/categories : body = {id:number, name:string"
+              // require token
+   		"post: /products :body = {name: string, price: number,category_id: number}",
             ```
         5- Create order.
             ```
@@ -189,7 +190,7 @@ TOKEN_KEY =String
 
 ```
     // require token
-   "post: /products : {
+   "post: /products : body = {
                         name: string,
                         price: number,
                         category_id: number

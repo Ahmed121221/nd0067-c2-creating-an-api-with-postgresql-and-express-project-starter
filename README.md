@@ -96,7 +96,7 @@ TOKEN_KEY =String
     ```
     npm run test
     ```
-    // if it dosen't word and you'r runing windows OS try this script :
+    // if it dosen't work and you are runing windows OS try this script :
     ```
     npm run test-windows
     ```
@@ -121,17 +121,17 @@ TOKEN_KEY =String
         4- Create Product.
             ```
               // require token
-   		"post: /products :body = {name: string, price: number,category_id: number}",
-            ```
-        5- Create order.
-            ```
-            "post: /orders : body =  {
-                                user_id: number,
-                                product_id: number,
-                                quantity: number
-                                }
-            ```
-        6- Explore APIs section for more functionality.
+
+"post: /products :body = {name: string, price: number,category_id: number}",
+`5- Create order.`
+"post: /orders : body = {
+user_id: number,
+product_id: number,
+quantity: number
+}
+
+```
+6- Explore APIs section for more functionality.
 
 ## DataBase Schema:
 
@@ -142,29 +142,34 @@ TOKEN_KEY =String
 ### To send Token:
 
 ```
+
 1-add key 'token' to rquest header.
 2-assign key's value to your token(jwt).
+
 ```
 
 ### 1- Product Categories EndPoints:
 
 ```
-  "post: /product/categories : body = {id:number, name:string} => {
-                                                                    "category": {
-                                                                        id: number,
-                                                                        name:string
-                                                                    }
-                                                                }",
 
-  "get: /product/categories/:id => {
-                                        id: number ,
-                                        name: string
-                                    }"
+"post: /product/categories : body = {id:number, name:string} => {
+"category": {
+id: number,
+name:string
+}
+}",
+
+"get: /product/categories/:id => {
+id: number ,
+name: string
+}"
+
 ```
 
 ### 2- User EndPoints:
 
 ```
+
     # login
     "post: /user/login : body =  {
                                     email: string,
@@ -172,7 +177,7 @@ TOKEN_KEY =String
                                     } => Token",
 
     #to create User:
-	"post: /user : body = {
+    "post: /user : body = {
                             email: string,
                             password: string,
                             firstname: string,
@@ -181,33 +186,35 @@ TOKEN_KEY =String
 
     # get all users:
     // require token.
-	"get: /users : => [] users",
+    "get: /users : => [] users",
 
     # get user by email.
     // require token.
-	"get: /users/:email => user"
-
+    "get: /users/:email => user"
 
 ```
 
 ### 3- Product EndPoints:
 
 ```
-    // require token
-   "post: /products : body = {
-                        name: string,
-                        price: number,
-                        category_id: number
-                        } => []product",
 
-	"get: /products : => []product",
-	"get: /products/:id => product",
+    // require token
+
+"post: /products : body = {
+name: string,
+price: number,
+category_id: number
+} => []product",
+
+    "get: /products : => []product",
+    "get: /products/:id => product",
 
 ```
 
 ### 4- Order EndPoints:
 
 ```
+
     #create order with product.
     // require token
     "post: /orders : body =  {
@@ -217,7 +224,7 @@ TOKEN_KEY =String
                                 } => {"order_id": number}",
 
     # add product to an order
-	"post: /orders/add : {
+    "post: /orders/add : {
                             order_id: number,
                             product_id: number,
                             quantity: number
@@ -230,7 +237,8 @@ TOKEN_KEY =String
 
     # get orders for a user filterd by order state (complete or active)
     //require token
-	"get: /orders/:user_id/:status :  => []order",
+    "get: /orders/:user_id/:status :  => []order",
+
 ```
 
 ## scripts:
@@ -238,29 +246,41 @@ TOKEN_KEY =String
 fromat and organize TS project:
 
 ```
+
 npm run clean-code
+
 ```
 
 run nodemon in developing (.ts):
 
 ```
+
 npm run start
+
 ```
 
 build and test project:
 
 ```
+
 npm run test
+
 ```
 
 build and run migrations on ${NODE_ENV} database.
 
 ```
+
 npm run migrate-build
+
 ```
 
 start builded server.
 
 ```
+
 npm run start-build
+
+```
+
 ```

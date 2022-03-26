@@ -93,10 +93,11 @@ TOKEN_KEY =String
 
 ### For Test run :
 
+    // for macOs or linux.
     ```
     npm run test
     ```
-    // if it dosen't work and you are runing windows OS try this script :
+    // for windows.
     ```
     npm run test-windows
     ```

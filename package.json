@@ -12,6 +12,7 @@
     "tsc": "tsc",
     "build": "npx tsc",
     "test": "db-migrate --env test up &&  npm run build && NODE_ENV=test jasmine-ts  && db-migrate --env test reset",
+    "test-windows": "set NODE_ENV=test && db-migrate --env test up &&  npm run build && NODE_ENV=test jasmine-ts  && db-migrate --env test reset",
     "migrate-build": "db-migrate up && npm run build",
     "start-build": "node ./dist/server.js"
   },

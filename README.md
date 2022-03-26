@@ -96,6 +96,10 @@ TOKEN_KEY =String
     ```
     npm run test
     ```
+    // if it dosen't word and you'r runing windows OS try this script :
+    ```
+    npm run test-windows
+    ```
 
 ### For Development:
 

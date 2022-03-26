@@ -7,7 +7,7 @@ enum DB_ENV {
 	prodaction = "prodaction",
 }
 
-const { NODE_ENV, DB_NAME, DB_TEST_NAME, USERNAME, PASSWORD, HOST, PORT } = process.env;
+const { NODE_ENV, DB_NAME, DB_TEST_NAME, DB_USER, DB_PASSWORD, HOST, PORT } = process.env;
 
 let db_name = "";
 
@@ -26,8 +26,8 @@ switch (NODE_ENV) {
 const Clint = new Pool({
 	database: db_name,
 	host: String(HOST),
-	user: String(USERNAME),
-	password: String(PASSWORD),
+	user: String(DB_USER),
+	password: String(DB_PASSWORD),
 	port: Number(PORT),
 });
 

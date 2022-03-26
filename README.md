@@ -59,8 +59,8 @@ DB_TEST_NAME =string
 // postgress user: username and password
 // (USERNAME.ex: store_user)
 // (PASSWORD.ex: mypassword)
-USERNAME =String
-PASSWORD =String
+DB_USER =String
+DB_PASSWORD =String
 
 // your host domain
 // (ex: localhost).

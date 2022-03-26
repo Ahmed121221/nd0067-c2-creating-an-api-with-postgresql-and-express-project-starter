@@ -11,8 +11,9 @@
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "tsc": "tsc",
     "build": "npx tsc",
-    "test": "db-migrate --env test up &&  npm run build && NODE_ENV=test jasmine-ts  && db-migrate --env test reset",
-    "test-windows": "set NODE_ENV=test && db-migrate --env test up &&  npm run build && NODE_ENV=test jasmine-ts  && db-migrate --env test reset",
+    "ـtest": "db-migrate --env test up &&  npm run build && NODE_ENV=test jasmine-ts  && db-migrate --env test reset",
+    "test":"export NODE_ENV=test && tsc && db-migrate up --env test && tsc && jasmine && db-migrate reset",
+    "test-windows": "set NODE_ENV=test && tsc && db-migrate up --env test && tsc && jasmine && db-migrate reset",
     "migrate-build": "db-migrate up && npm run build",
     "start-build": "node ./dist/server.js"
   },

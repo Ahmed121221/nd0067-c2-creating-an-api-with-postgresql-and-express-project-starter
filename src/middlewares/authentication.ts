@@ -3,16 +3,14 @@ import "dotenv/config";
 
 import User from "../models/user";
 
-function checkToken(req: Request, res: Response, next: NextFunction) {
-	if (req.headers.token === undefined || req.headers.token == "") {
+function authenticateToken(req: Request, res: Response, next: NextFunction) {
+	const auth = req.headers.authorization;
+	const token = auth?.split(" ")[1];
+
+	if (token === undefined || token == "") {
 		res.status(417).json("TOKEN IS REQUIRED.");
 		return;
 	}
-	next();
-}
-
-function validateToken(req: Request, res: Response, next: NextFunction) {
-	const token = req.headers.token as string;
 
 	if (!User.veifyToken(token)) {
 		res.status(401);
@@ -23,4 +21,4 @@ function validateToken(req: Request, res: Response, next: NextFunction) {
 	next();
 }
 
-export default [checkToken, validateToken];
+export default authenticateToken;

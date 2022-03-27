@@ -144,8 +144,10 @@ quantity: number
 
 ```
 
-1-add key 'token' to rquest header.
-2-assign key's value to your token(jwt).
+This app use Bearer Token:
+
+1-Add word 'Bearer' to rquest headers authorization.
+2-Add your token following 'Bearer' by one space.
 
 ```
 

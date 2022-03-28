@@ -227,6 +227,7 @@ category_id: number
                                 } => {"order_id": number}",
 
     # add product to an order
+    // require token
     "post: /orders/add : {
                             order_id: number,
                             product_id: number,

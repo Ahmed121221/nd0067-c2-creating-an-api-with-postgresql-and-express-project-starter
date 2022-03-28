@@ -61,7 +61,7 @@ const createParams = ["user_id", "product_id", "quantity"];
 const orders_routes = (app: Application) => {
 	app.get("/orders/:user_id/:status", auth, user_status_validitor, activeOrders);
 	app.post("/orders", auth, chekQuiryParams(createParams), create);
-	app.post("/orders/add", chekQuiryParams(addProductParams), addProductToOrder);
+	app.post("/orders/add", auth, chekQuiryParams(addProductParams), addProductToOrder);
 };
 
 export default orders_routes;

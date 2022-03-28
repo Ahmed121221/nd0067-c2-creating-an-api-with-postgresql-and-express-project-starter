@@ -105,45 +105,39 @@ TOKEN_KEY =String
 ### For Development:
 
         1- Run:
+            // this command will run migrations, create the schema then build the app.
             npm run migrate-build
 
-            // this command will run migrations, create the schema then build the app.
-
         2- Run:
-            npm run start-build
-
             // this command will start the server and
             // server will create status for orders to use it latter.
+            npm run start-build
 
         3- Create Categories for products using this end point.
-            ```
              "post: /product/categories : body = {id:number, name:string}"
-            ```
+
         4- Create Product.
-            ```
-              // require token
+            // require token
+            "post: /products :body = {name: string, price: number,category_id: number}",
 
-"post: /products :body = {name: string, price: number,category_id: number}",
-`5- Create order.`
-"post: /orders : body = {
-user_id: number,
-product_id: number,
-quantity: number
-}
+        5- Create order.
+            "post: /orders : body = {
+                                user_id: number,
+                                product_id: number,
+                                quantity: number
+                                }
 
-```
-6- Explore APIs section for more functionality.
+        6- Explore APIs Section for more functionality.
 
-## DataBase Schema:
+## Database Schema:
 
-![store_schema](https://user-images.githubusercontent.com/24965900/159927525-d15fa251-0f5b-44d1-b18f-9643cc7cd06a.png)
+![store_schema](https://github.com/Ahmed121221/nd0067-c2-creating-an-api-with-postgresql-and-express-project-starter/blob/master/store_schema.png?raw=true)
 
 ## APIs:
 
 ### To send Token:
 
 ```
-
 This app use Bearer Token:
 
 1-Add word 'Bearer' to rquest headers authorization.
@@ -284,7 +278,5 @@ start builded server.
 ```
 
 npm run start-build
-
-```
 
 ```

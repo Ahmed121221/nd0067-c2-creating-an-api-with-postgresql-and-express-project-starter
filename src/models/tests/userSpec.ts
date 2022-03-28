@@ -72,7 +72,7 @@ describe("User Module: ", () => {
 		describe("Create:", () => {
 			describe("Validate Data:", () => {
 				it("validate password", async () => {
-					const req = await request.post("/users").set("token", InitData.USERTOKEN).send({
+					const req = await request.post("/users").set("Authorization", `Bearer ${InitData.USERTOKEN}`).send({
 						email: "failed@test",
 						firstname: "fname",
 						lastname: "lname",
@@ -81,7 +81,7 @@ describe("User Module: ", () => {
 				});
 
 				it("validate email", async () => {
-					const req = await request.post("/users").set("token", InitData.USERTOKEN).send({
+					const req = await request.post("/users").set("Authorization", `Bearer ${InitData.USERTOKEN}`).send({
 						firstname: "faild",
 						lastname: "test",
 						password: "password",
@@ -90,7 +90,10 @@ describe("User Module: ", () => {
 				});
 
 				it("Check if email already exists", async () => {
-					const req = await request.post("/users").set("token", InitData.USERTOKEN).send(InitData.USER);
+					const req = await request
+						.post("/users")
+						.set("Authorization", `Bearer ${InitData.USERTOKEN}`)
+						.send(InitData.USER);
 					expect(req.status).toBe(400);
 				});
 			});
@@ -102,7 +105,7 @@ describe("User Module: ", () => {
 					firstname: "name",
 					lastname: "lastname",
 				};
-				const req = await request.post("/users").set("token", InitData.USERTOKEN).send(newUser);
+				const req = await request.post("/users").set("Authorization", `Bearer ${InitData.USERTOKEN}`).send(newUser);
 				expect(req.status).toBe(201);
 			});
 		});
@@ -113,7 +116,7 @@ describe("User Module: ", () => {
 			});
 
 			it("get users", async () => {
-				const req = await request.get("/users").set("token", InitData.USERTOKEN);
+				const req = await request.get("/users").set("Authorization", `Bearer ${InitData.USERTOKEN}`);
 				expect(req.status).toBe(200);
 				expect(req.body.length).toBeTruthy();
 			});
@@ -126,11 +129,13 @@ describe("User Module: ", () => {
 
 			it("require valid Token", async () => {
 				const invaildToken = uToken + "vfjvbd";
-				await request.get(`/users/${u.id}`).set("token", invaildToken).expect(401);
+				await request.get(`/users/${u.id}`).set("Authorization", `Bearer ${invaildToken}`).expect(401);
 			});
 
 			it("get user", async () => {
-				const req = await request.get(`/users/${InitData.USER.email}`).set("token", InitData.USERTOKEN);
+				const req = await request
+					.get(`/users/${InitData.USER.email}`)
+					.set("Authorization", `Bearer ${InitData.USERTOKEN}`);
 				expect(req.status).toBe(200);
 				expect(req.body).toEqual({
 					user: {

@@ -35,7 +35,7 @@ describe("Order Model: ", () => {
 			it("should create new order", async () => {
 				const res = await request
 					.post("/orders")
-					.set("token", InitData.USERTOKEN)
+					.set("Authorization", `Bearer ${InitData.USERTOKEN}`)
 					.send({
 						user_id: InitData.USER.id ?? 1,
 						product_id: InitData.PRODUCT2.id ?? 2,
@@ -46,7 +46,7 @@ describe("Order Model: ", () => {
 			});
 
 			it("should add new product", async () => {
-				const res = await request.post("/orders/add").set("token", InitData.USERTOKEN).send({
+				const res = await request.post("/orders/add").set("Authorization", `Bearer ${InitData.USERTOKEN}`).send({
 					order_id: 1,
 					product_id: InitData.PRODUCT.id,
 					quantity: 2,
@@ -61,17 +61,23 @@ describe("Order Model: ", () => {
 
 		describe("Index:", () => {
 			it("require valid Token", async () => {
-				const res = await request.get(`/orders/${InitData.USER.id}/active`).set("token", InitData.USERTOKEN + "dd");
+				const res = await request
+					.get(`/orders/${InitData.USER.id}/active`)
+					.set("Authorization", `Bearer ${InitData.USERTOKEN}dd`);
 				expect(res.status).toBe(401);
 			});
 
 			it("list all active orders for a user", async () => {
-				const res = await request.get(`/orders/${InitData.USER.id}/active`).set("token", InitData.USERTOKEN);
+				const res = await request
+					.get(`/orders/${InitData.USER.id}/active`)
+					.set("Authorization", `Bearer ${InitData.USERTOKEN}`);
 				expect(res.body?.length).toBeTruthy();
 			});
 
 			it("list all complete orders for a user", async () => {
-				const res = await request.get(`/orders/${InitData.USER.id}/complete`).set("token", InitData.USERTOKEN);
+				const res = await request
+					.get(`/orders/${InitData.USER.id}/complete`)
+					.set("Authorization", `Bearer ${InitData.USERTOKEN}`);
 				expect(res.body?.length).toBeFalsy();
 			});
 		});

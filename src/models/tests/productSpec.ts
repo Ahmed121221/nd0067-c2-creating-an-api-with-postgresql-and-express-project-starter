@@ -58,21 +58,18 @@ describe("Product Model: ", () => {
 			});
 
 			it("require valid Token", async () => {
-				const res = await request
-					.post(`/products`)
-					.set("token", InitData.USERTOKEN + "dd")
-					.send({
-						name: "product2",
-						price: 106,
-						category_id: InitData.CATEGORY.id,
-					});
+				const res = await request.post(`/products`).set("Authorization", `Bearer ${InitData.USERTOKEN}dd`).send({
+					name: "product2",
+					price: 106,
+					category_id: InitData.CATEGORY.id,
+				});
 				expect(res.status).toBe(401);
 			});
 
 			it("should create product", async () => {
 				// this test debends on Model : should create product test
 				const p = { name: "product2", price: 106, category_id: InitData.CATEGORY.id };
-				const res = await request.post(`/products`).set("token", InitData.USERTOKEN).send(p);
+				const res = await request.post(`/products`).set("Authorization", `Bearer ${InitData.USERTOKEN}`).send(p);
 				const { name, price, category } = res.body[0];
 				const resProduct = { name, price, category };
 				expect(resProduct).toEqual({

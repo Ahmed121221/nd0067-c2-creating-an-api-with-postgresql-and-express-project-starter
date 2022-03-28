@@ -24,25 +24,33 @@ export class Category {
 
 	async checId(): Promise<boolean> {
 		// check if id in database and assign this.name
-		const q = `select name from categories where id =${this._id};`;
-		const query: Quiry = { q };
-		const result = await Connection.excute<ICategory>(query);
+		try {
+			const q = `select name from categories where id =${this._id};`;
+			const query: Quiry = { q };
+			const result = await Connection.excute<ICategory>(query);
 
-		if (!result) return false;
+			if (!result) return false;
 
-		this._name = String(result[0].name) ?? "";
-		return true;
+			this._name = String(result[0].name) ?? "";
+			return true;
+		} catch (e) {
+			throw new Error(`Something wrong happend Could't check id = ${this._id}`);
+		}
 	}
 
 	async getById(): Promise<ICategory | null> {
 		// check if id in database and assign this.name
-		const q = `select id, name from categories where id =${this._id};`;
-		const query: Quiry = { q };
-		const result = await Connection.excute<ICategory>(query);
+		try {
+			const q = `select id, name from categories where id =${this._id};`;
+			const query: Quiry = { q };
+			const result = await Connection.excute<ICategory>(query);
 
-		if (!result) return null;
+			if (!result) return null;
 
-		return result[0];
+			return result[0];
+		} catch (e) {
+			throw new Error(`Something wrong happend Could't get name for id = ${this._id}`);
+		}
 	}
 
 	async create(): Promise<ICategory> {

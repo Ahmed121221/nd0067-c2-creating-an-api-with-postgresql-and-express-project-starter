@@ -4,6 +4,7 @@ import { Quiry, Connection } from "../util/models/database";
 import jwt, { Secret } from "jsonwebtoken";
 
 const { SALT_ROUNDS: ROUNDS, BCRYPT_PASSWORD: PEPPAR } = process.env;
+
 export interface IUser {
 	id?: number;
 	password?: string;
@@ -37,7 +38,12 @@ export default class User {
 	}
 
 	private async hashPassword(): Promise<string> {
-		return await bcrypt.hash(String(this._password) + PEPPAR, parseInt(String(ROUNDS)));
+		try {
+			return await bcrypt.hash(String(this._password) + PEPPAR, parseInt(String(ROUNDS)));
+		} catch (e) {
+			console.log(e);
+			throw new Error("Couldn't encrypt password");
+		}
 	}
 
 	private async checkPassword(hashPassword: string): Promise<boolean> {
@@ -107,17 +113,22 @@ export default class User {
 	}
 
 	async create(): Promise<IUser | null> {
-		const q = `INSERT INTO ${User.tableName}
+		try {
+			const q = `INSERT INTO ${User.tableName}
                      (firstname,
 					  lastname,
                       email,
                       password)
                    VALUES ($1, $2, $3, $4) 
                    returning firstname as firstName, lastname as lastName, email, id;`;
-		const users = await Connection.excute<IUser>({
-			q,
-			params: [this._firstName, this._lastName, this._email, await this.hashPassword()],
-		});
-		return users ? users[0] : users;
+			const hashedPassword = await this.hashPassword();
+			const users = await Connection.excute<IUser>({
+				q,
+				params: [this._firstName, this._lastName, this._email, hashedPassword],
+			});
+			return users ? users[0] : users;
+		} catch (e) {
+			throw new Error("Something wringe happend couldn't create user");
+		}
 	}
 }

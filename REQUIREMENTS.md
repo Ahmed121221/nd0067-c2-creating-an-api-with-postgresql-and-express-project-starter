@@ -7,22 +7,20 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 #### Products
 
-- Index
-- Show
-- Create [token required]
-- [OPTIONAL] Top 5 most popular products
-- [OPTIONAL] Products by category (args: product category)
+- Index `/products`
+- Show `/products/:id`
+- Create [token required] `/products : body = { name: string, price: number, category_id: number }`
 
 #### Users
 
-- Index [token required]
-- Show [token required]
-- Create N[token required]
+- Index [token required] `/users`
+- Show [token required] `/users/:id`
+- Create `/user : body = { email: string, password: string, firstname: string, lastname: string }`
 
 #### Orders
 
-- Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
+- Current Order by user [token required] `/orders/:user_id/active `
+- Completed Orders by user [token required] `/orders/:user_id/complete`
 
 ## Data Shapes
 
@@ -31,7 +29,21 @@ These are the notes from a meeting with the frontend developer that describe wha
 - id
 - name
 - price
-- [OPTIONAL] category
+- category
+
+```
+interface Product {
+	id?: number;
+	name: string;
+	price: number;
+	category: ICategory;
+}
+
+interface ICategory {
+	id: number;
+	name?: string;
+}
+```
 
 #### User
 
@@ -40,6 +52,17 @@ These are the notes from a meeting with the frontend developer that describe wha
 - lastName
 - password
 
+```
+interface IUser {
+	id?: number;
+	password?: string;
+
+	email: string;
+	lastname: string;
+	firstname: string;
+}
+```
+
 #### Orders
 
 - id
@@ -47,6 +70,19 @@ These are the notes from a meeting with the frontend developer that describe wha
 - quantity of each product in the order
 - user_id
 - status of order (active or complete)
+
+```
+interface Product {
+	id: number;
+	quantity: number;
+}
+interface IOrder {
+	id: number;
+	proudcts: Product[];
+	user_id: number;
+	status: string;
+}
+```
 
 ### [DataBase Schema:](https://github.com/Ahmed121221/nd0067-c2-creating-an-api-with-postgresql-and-express-project-starter/blob/master/store_schema.png)
 

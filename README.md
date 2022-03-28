@@ -150,16 +150,16 @@ This app use Bearer Token:
 ```
 
 "post: /product/categories : body = {id:number, name:string} => {
-"category": {
-id: number,
-name:string
-}
-}",
+                                                                    "category": {
+                                                                    id: number,
+                                                                    name:string
+                                                                    }
+                                                                }",
 
 "get: /product/categories/:id => {
-id: number ,
-name: string
-}"
+                                    id: number ,
+                                    name: string
+                                }"
 
 ```
 
@@ -198,10 +198,10 @@ name: string
     // require token
 
 "post: /products : body = {
-name: string,
-price: number,
-category_id: number
-} => []product",
+                            name: string,
+                            price: number,
+                            category_id: number
+                            } => []product",
 
     "get: /products : => []product",
     "get: /products/:id => product",

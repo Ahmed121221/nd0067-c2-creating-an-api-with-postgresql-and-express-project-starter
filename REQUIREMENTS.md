@@ -14,7 +14,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 #### Users
 
 - Index [token required] `/users`
-- Show [token required] `/users/:id`
+- Show [token required] `/users/:email`
 - Create `/user : body = { email: string, password: string, firstname: string, lastname: string }`
 
 #### Orders

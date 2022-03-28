@@ -2,7 +2,7 @@ import { Request, Response, Application } from "express";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
-import User from "../models/user";
+import User, { IUser } from "../models/user";
 import auth from "../middlewares/authentication";
 import { userValidators } from "../middlewares/validatores/user";
 
@@ -67,7 +67,7 @@ async function create(req: Request, res: Response): Promise<void> {
 			return;
 		}
 		const createdUser = await user.create();
-		const token = jwt.sign({ user: createdUser }, String(process.env.TOKEN_KEY));
+		const token = User.generateToken(createdUser as IUser);
 		res.status(201).json(token);
 	} catch (err) {
 		res.status(500).json(err instanceof Error ? err.message : "coulde't create User.");

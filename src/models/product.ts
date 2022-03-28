@@ -40,7 +40,7 @@ class ProdactStore {
 					  where id=${id} )  p
 					join categories c
 					on p.category_id = c.id;`;
-		const query: Quiry = { q };
+		const query: Quiry = { q, errMsg: `Product Model coulden't show id = ${id}` };
 
 		const products = await Connection.excute<IProductCategory>(query);
 
@@ -50,8 +50,9 @@ class ProdactStore {
 	}
 
 	async create(p: Product): Promise<Product[]> {
-		const q = `INSERT INTO ${this.table} (name, price, category_id) VALUES($1, $2, $3) returning id; `;
 		try {
+			const q = `INSERT INTO ${this.table} (name, price, category_id) VALUES($1, $2, $3) returning id; `;
+
 			const conn = await Clint.connect();
 			const newProducts = await conn.query(q, [p.name, p.price, p.category.id]);
 			p.id = newProducts.rows[0].id;

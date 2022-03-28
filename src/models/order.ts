@@ -84,7 +84,8 @@ class OrderModel {
                     where user_id = ($1) and s.name = ($2)
 					order by id;`;
 
-		const orders = await Connection.excute<DbOrder>({ q, params: [user_id, status] });
+		const errMsg = `couldn't fetch ${status} oders for user id ${user_id}`;
+		const orders = await Connection.excute<DbOrder>({ q, errMsg, params: [user_id, status] });
 		return orders ? OrderModel.mappOrders(orders) : null;
 	}
 

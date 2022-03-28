@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 
 import { Quiry, Connection } from "../util/models/database";
-import jwt from "jsonwebtoken";
+import jwt, { Secret } from "jsonwebtoken";
 
 const { SALT_ROUNDS: ROUNDS, BCRYPT_PASSWORD: PEPPAR } = process.env;
 export interface IUser {
@@ -92,12 +92,14 @@ export default class User {
 	}
 
 	static generateToken(u: IUser): string {
-		return jwt.sign({ user: { email: u.email, firstname: u.firstname } }, String(process.env.TOKEN_KEY));
+		const TOKEN_KEY = process.env.TOKEN_KEY as unknown as Secret;
+		return jwt.sign({ user: { email: u.email, firstname: u.firstname } }, TOKEN_KEY);
 	}
 
 	static veifyToken(token: string): boolean {
 		try {
-			jwt.verify(token, String(process.env.TOKEN_KEY));
+			const TOKEN_KEY = process.env.TOKEN_KEY as unknown as Secret;
+			jwt.verify(token, TOKEN_KEY);
 			return true;
 		} catch (err) {
 			return false;

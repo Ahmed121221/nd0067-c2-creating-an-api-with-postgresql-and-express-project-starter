@@ -3,6 +3,7 @@ import "dotenv/config";
 
 export type Quiry = {
 	q: string;
+	errMsg?: string;
 	params?: unknown[];
 };
 
@@ -20,7 +21,7 @@ export class Connection {
 		} catch (err) {
 			console.log("------- Connection Error ------- \n", err);
 			throw new Error(
-				`Something Wrong Happend When The Systen Tried To Fetch/retrive Tha Data. ${
+				`${quiry.errMsg}:Something Wrong Happend When The Systen Tried To Fetch/retrive Tha Data. ${
 					err instanceof Error ? err.message : ""
 				}`
 			);
